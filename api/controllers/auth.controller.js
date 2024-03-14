@@ -7,23 +7,23 @@ export const signup = async (req, res) => {
     if (!email || !passwordHash || !username) {
       res.status(500).json({ message: "All fields are required" });
     }
-    if (passwordHash.length < 6) {
+    if (passwordHash.lenght < 6) {
       es.status(400).json({
         message: "Password has to be at least 6 characters",
       });
     }
-    const existingUser = awaitUser.findOne({ email });
+    const existingUser = await User.findOne({ email });
     if (existingUser) {
       res.status(400).json({ message: "Email already exists" });
     }
-    const salt = bcryptjs.genSalt()
-    const hashP = bcryptjs.hashSync(passwordHash, salt);
+    const hashP = 
+    bcryptjs.hashSync(passwordHash, 10);
 
     const newUser = new User({username,email,passwordHash:hashP})
     
     const savedUser = await newUser.save()
 
-    res.status(201).json({message:"User created", savedUser})
+    res.status(201).json(savedUser)
   } catch (error) {
     console.error(error);
     res.status(500).send();
