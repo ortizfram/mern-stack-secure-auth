@@ -1,14 +1,15 @@
 import User from "../models/user.model.js";
 import bcryptjs from "bcryptjs";
-import jwt from "jsonwebtoken"
+import jwt from "jsonwebtoken";
 
+// register
 export const signup = async (req, res) => {
   try {
-    const { username, email, passwordHash } = req.body;
-    if (!email || !passwordHash || !username) {
+    const { username, email, password } = req.body;
+    if (!email || !password || !username) {
       res.status(500).json({ message: "All fields are required" });
     }
-    if (passwordHash.lenght < 6) {
+    if (password.length < 6) {
       es.status(400).json({
         message: "Password has to be at least 6 characters",
       });
@@ -17,25 +18,66 @@ export const signup = async (req, res) => {
     if (existingUser) {
       res.status(400).json({ message: "Email already exists" });
     }
-    const hashP = 
-    bcryptjs.hashSync(passwordHash, 10);
+    const hashP = bcryptjs.hashSync(password, 10);
 
-    const newUser = new User({username,email,passwordHash:hashP})
-    
-    const savedUser = await newUser.save()
+    const newUser = new User({ username, email, password: hashP });
 
-    // res.status(201).json(savedUser)
+    const savedUser = await newUser.save();
 
-    // log user in
-    const token = jwt.sign({
-      user: savedUser._id
-    }, process.env.JWT_SECRET)
 
-    res.cookie("token", token, {
-      httpOnly:true,
-    }).send()
+    // sign the token
+    const token = jwt.sign(
+      {
+        user: savedUser._id,
+      },
+      process.env.JWT_SECRET
+    );
+
+    res
+      .cookie("token", token, {
+        httpOnly: true,
+      })
+      .send();
   } catch (error) {
     console.error(error);
     res.status(500).send();
   }
 };
+
+// login
+export const login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    if (!email || !password) {
+      res.status(500).json({ message: "All fields are required" });
+    }
+    const existingUser = await User.findOne({ email });
+    if (!existingUser)
+      return res.status(401).json({ message: "Wrong email or password" });
+
+    const correctPass = await bcryptjs.compare(password, existingUser.password);
+    if (!correctPass)
+      return res.status(401).json({ message: "Wrong email or passwor" });
+
+      // sign the token
+      const token = jwt.sign(
+        {
+          user: existingUser._id,
+        },
+        process.env.JWT_SECRET
+      );
+  
+      res
+        .cookie("token", token, {
+          httpOnly: true,
+        })
+        .send();
+  } catch (error) {}
+};
+
+export const logout = async (req,res)=>{
+  res.cookie("token", "", {
+    httpOnly:true,
+    expires: new Date(0)
+  }).send()
+}
