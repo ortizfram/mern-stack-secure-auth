@@ -1,6 +1,8 @@
 import React, { useContext, useState } from "react";
 import axios from "axios";
 import AuthContext from "../context/AuthContext";
+import { useNavigate } from 'react-router-dom';
+
 
 function Register() {
   const [email, setEmail] = useState("");
@@ -9,13 +11,16 @@ function Register() {
   const [passwordVerify, setPasswordVerify] = useState("");
 
   const{getLoggedIn} = useContext(AuthContext)
+  const navigate = useNavigate();
+
 
   async function register(e) {
     e.preventDefault();
     try {
       const registerData = { email, username, password, passwordVerify };
       await axios.post("http://localhost:2020/api/auth/signup", registerData);
-      getLoggedIn()
+      await getLoggedIn()
+      navigate('/')
     } catch (error) {
       console.error(error);
     }

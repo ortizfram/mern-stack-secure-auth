@@ -1,19 +1,25 @@
 import React, { useContext, useState } from "react";
 import axios from "axios";
 import AuthContext from "../context/AuthContext";
+import { useNavigate } from 'react-router-dom';
+
+
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const { getLoggedIn } = useContext(AuthContext);
+  const navigate = useNavigate();
+
 
   async function login(e) {
     e.preventDefault();
     try {
       const loginData = { email, password };
       await axios.post("http://localhost:2020/api/auth/login", loginData);
-      getLoggedIn();
+      await getLoggedIn();
+      navigate("/");
     } catch (error) {
       console.error(error);
     }
