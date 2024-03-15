@@ -81,3 +81,21 @@ export const logout = async (req,res)=>{
     expires: new Date(0)
   }).send()
 }
+
+// logged in check
+export const loggedIn= async(req, res)=> {
+  /* frontend check if im logged by sending token to the server 
+     we do this because server is http only, so we make http req to the server
+  */
+  try {
+    const token = req.cookies.token;
+
+    // check if token exists
+    if(!token) return res.json(false);
+
+    res.send(true)
+  } catch (error) {
+    console.error(error);
+    res.json(false);
+  }
+}

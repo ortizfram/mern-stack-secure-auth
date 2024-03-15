@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken"
 
 /* 
-  checks if user is logged in by
+  checks if user is logged in by middleware
   - req cookies.token
   - checking existence
   - verifying it with jwt
