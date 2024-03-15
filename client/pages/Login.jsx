@@ -1,15 +1,19 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import axios from "axios";
- 
+import AuthContext from "../context/AuthContext";
+
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const { getLoggedIn } = useContext(AuthContext);
+
   async function login(e) {
     e.preventDefault();
     try {
-      const loginData = { email,password };
+      const loginData = { email, password };
       await axios.post("http://localhost:2020/api/auth/login", loginData);
+      getLoggedIn();
     } catch (error) {
       console.error(error);
     }
@@ -30,7 +34,7 @@ function Login() {
           onChange={(e) => setPassword(e.target.value)}
           value={password}
         />
-        
+
         <button type="submit">Login</button>
       </form>
     </div>

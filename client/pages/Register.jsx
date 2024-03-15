@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import axios from "axios";
+import AuthContext from "../context/AuthContext";
 
 function Register() {
   const [email, setEmail] = useState("");
@@ -7,11 +8,14 @@ function Register() {
   const [password, setPassword] = useState("");
   const [passwordVerify, setPasswordVerify] = useState("");
 
+  const{getLoggedIn} = useContext(AuthContext)
+
   async function register(e) {
     e.preventDefault();
     try {
       const registerData = { email, username, password, passwordVerify };
       await axios.post("http://localhost:2020/api/auth/signup", registerData);
+      getLoggedIn()
     } catch (error) {
       console.error(error);
     }
