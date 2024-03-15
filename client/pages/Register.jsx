@@ -10,7 +10,7 @@ function Register() {
   async function register(e) {
     e.preventDefault();
     try {
-      const registerData = { email,username, password, passwordVerify };
+      const registerData = { email, username, password, passwordVerify };
       await axios.post("http://localhost:2020/api/auth/signup", registerData);
     } catch (error) {
       console.error(error);
