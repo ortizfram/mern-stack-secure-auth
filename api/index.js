@@ -4,12 +4,14 @@ import cors from "cors";
 import dotenv from "dotenv";
 import authRoute from "./routes/auth.route.js"
 import customerRoute from "./routes/customer.route.js"
+import cookieParser from "cookie-parser"
 dotenv.config();
 const port = process.env.PORT || 8080;
 const DB_URI= process.env.DB_URI;
 
 const app = express();
 app.use(express.json());
+app.use(cookieParser())
 app.use(cors());
 
 // routes

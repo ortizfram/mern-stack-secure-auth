@@ -1,20 +1,34 @@
-import express from "express"
-import Customer from "../models/customer.model.js"
-const router = express.Router()
+import express from "express";
+import Customer from "../models/customer.model.js";
+import auth from "../middleware/auth.js";
 
-router.post('/', async(req,res)=>{
-    try {
-        const {name} = req.body
+const router = express.Router();
 
-        const newCustomer = new Customer({name})
+// create customer
+router.post("/", auth, async (req, res) => {
+  try {
+    const { name } = req.body;
 
-        const savedCustomer = await newCustomer.save()
+    const newCustomer = new Customer({ name });
 
-        res.json(savedCustomer)
-    } catch (error) {
-        console.error(error)
-        res.status(500).send()
-    }
-})
+    const savedCustomer = await newCustomer.save();
 
-export default router
+    res.json(savedCustomer);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send();
+  }
+});
+
+//  get customers
+router.get("/", auth, async (req, res) => {
+  try {
+    const customers = await Customer.find();
+    res.json(customers);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send();
+  }
+});
+
+export default router;
