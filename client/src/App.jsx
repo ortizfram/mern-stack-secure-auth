@@ -1,10 +1,11 @@
 import React, { useContext } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "../layouts/Navbar";
-import Register from "../pages/Register";
+import Register from "../pages/auth/Register";
 import axios from "axios";
 import AuthContext from "../context/AuthContext";
-import Login from "../pages/Login";
+import Login from "../pages/auth/Login";
+import Customers from "../components/customer/Customers";
 
 axios.defaults.withCredentials = true;
 
@@ -26,7 +27,7 @@ function App() {
         )}
         {loggedIn === true && (
           <>
-            <Route path="/customer" element={<h1>customer</h1>} />
+            <Route path="/customer" element={<Customers />} />
           </>
         )}
       </Routes>

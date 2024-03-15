@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import AuthContext from "../context/AuthContext";
-import LogoutBtn from "../pages/LogoutBtn";
+import LogoutBtn from "../components/auth/LogoutBtn";
 
 function Navbar() {
   const { loggedIn } = useContext(AuthContext);//destructure loggedIn
