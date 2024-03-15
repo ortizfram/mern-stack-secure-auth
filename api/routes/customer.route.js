@@ -20,7 +20,7 @@ router.post("/", auth, async (req, res) => {
   }
 });
 
-//  get customers
+//  get customers.
 router.get("/", auth, async (req, res) => {
   try {
     const customers = await Customer.find();
